@@ -1,26 +1,26 @@
-// import { db } from "@vercel/postgres";
+import { db } from "@vercel/postgres";
+import { NextResponse } from 'next/server';
 
-// const client = await db.connect();
+const client = await db.connect();
 
-// async function listInvoices() {
-// 	const data = await client.sql`
-//     SELECT invoices.amount, customers.name
-//     FROM invoices
-//     JOIN customers ON invoices.customer_id = customers.id
-//     WHERE invoices.amount = 666;
-//   `;
-
-// 	return data.rows;
-// }
+async function listInvoices() {
+  const data = await client.sql`
+    SELECT invoices.amount, customers.name
+    FROM invoices
+    JOIN customers ON invoices.customer_id = customers.id
+    WHERE invoices.amount = 666;
+  `;
+  
+  return data.rows;
+}
 
 export async function GET() {
-  return Response.json({
-    message:
-      'Uncomment this file and remove this line. You can delete this file when you are finished.',
-  });
-  // try {
-  // 	return Response.json(await listInvoices());
-  // } catch (error) {
-  // 	return Response.json({ error }, { status: 500 });
-  // }
+  try {
+    const invoices = await listInvoices();
+    // Ensure the result is returned as a valid NextResponse.
+    return NextResponse.json(invoices);
+  } catch (error) {
+    // Handle error and return a proper response
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 }
