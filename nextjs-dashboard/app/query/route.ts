@@ -21,6 +21,6 @@ export async function GET() {
     return NextResponse.json(invoices);
   } catch (error) {
     // Handle error and return a proper response
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return Response.json({error}, { status: 500 });
   }
 }
